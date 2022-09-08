@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManagement.Base", "VehicleManagement.Base\VehicleManagement.Base.csproj", "{46023486-7877-42DC-849B-DC77A2DF56E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManagement.User", "VehicleManagement.User\VehicleManagement.User.csproj", "{D4C260E5-05C7-45F6-9B14-8CC8D43F887F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleManagement.Web", "VehicleManagement.Web\VehicleManagement.Web.csproj", "{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46023486-7877-42DC-849B-DC77A2DF56E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46023486-7877-42DC-849B-DC77A2DF56E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46023486-7877-42DC-849B-DC77A2DF56E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46023486-7877-42DC-849B-DC77A2DF56E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4C260E5-05C7-45F6-9B14-8CC8D43F887F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4C260E5-05C7-45F6-9B14-8CC8D43F887F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4C260E5-05C7-45F6-9B14-8CC8D43F887F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4C260E5-05C7-45F6-9B14-8CC8D43F887F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
