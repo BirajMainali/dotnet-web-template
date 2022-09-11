@@ -1,1 +1,1 @@
-# pits-web-app
+# web-app-template-repo
