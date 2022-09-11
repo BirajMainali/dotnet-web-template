@@ -1,4 +1,5 @@
-﻿using AspNetCoreHero.ToastNotification.Extensions;
+﻿using App.Base.Providers;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 namespace App.Web;
 
@@ -16,6 +17,11 @@ public static class HttpPipelineConfig
             app.UseHsts();
         }
 
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new CustomFileProvider(Path.Combine(app.Environment.ContentRootPath, "Content")),
+            RequestPath = "/Content"
+        });
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();

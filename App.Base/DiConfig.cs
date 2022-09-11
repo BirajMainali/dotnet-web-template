@@ -3,6 +3,7 @@ using App.Base.DataContext.Interfaces;
 using App.Base.Providers;
 using App.Base.Providers.Interface;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace App.Base
 {
@@ -10,7 +11,6 @@ namespace App.Base
     {
         public static IServiceCollection UseBase(this IServiceCollection service)
             => service.AddScoped<IConnectionProvider, ConnectionProvider>()
-                .AddScoped<CustomFileProvider>()
                 .AddScoped<IUow, Uow>();
     }
 }

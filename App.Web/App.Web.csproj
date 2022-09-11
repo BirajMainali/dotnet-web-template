@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>aspnet-MagicWithVat-8287D884-01E1-47F4-BB3F-CB386F8549C6</UserSecretsId>
+        <UserSecretsId>aspnet-app-8287D884-01E1-47F4-BB3F-CB386F8549C6</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,6 +26,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\App.User\App.User.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Content" />
     </ItemGroup>
 
 </Project>
