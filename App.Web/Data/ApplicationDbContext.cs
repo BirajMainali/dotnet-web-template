@@ -1,5 +1,6 @@
-﻿using App.Base.DataContext;
 using App.Base.GenericModel;
+using App.Base.GenericModel.Interfaces;
+using App.Base.DataContext;
 using App.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +48,7 @@ public class ApplicationDbContext : DbContext
         var deletedEntries = ChangeTracker.Entries().Where(x => x.State == EntityState.Deleted);
         foreach (var deletedEntry in deletedEntries)
         {
+            if(deletedEntry.Entity is not ISoftDelete) continue;
             deletedEntry.State = EntityState.Modified;
             if (deletedEntry.Entity is not GenericModel model) continue;
             model.RecStatus = 'D';
