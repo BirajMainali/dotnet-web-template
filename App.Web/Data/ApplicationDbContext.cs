@@ -1,4 +1,5 @@
-﻿using App.Base.GenericModel;
+﻿using App.Base.DataContext;
+using App.Base.GenericModel;
 using App.User;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        EntitySnakeCaseConverter.ConvertEntityToSnakeCase(builder);
         builder.AddGlobalHasQueryFilterForBaseTypeEntities<GenericModel>(x => x.RecStatus != 'D');
         builder.AddUser();
     }
