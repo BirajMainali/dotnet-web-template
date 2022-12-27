@@ -9,24 +9,15 @@ namespace App.Web.Data;
 
 public class ApplicationDbContext : DbContext
 {
-    private readonly IConnectionProvider _connectionProvider;
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConnectionProvider connectionProvider) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        _connectionProvider = connectionProvider;
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        // EntitySnakeCaseConverter.ConvertEntityToSnakeCase(builder);
         builder.AddGlobalHasQueryFilterForBaseTypeEntities<GenericModel>(x => x.RecStatus != 'D');
         builder.AddUser();
     }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder
-            .UseNpgsql(_connectionProvider.GetConnection())
-            .UseSnakeCaseNamingConvention();
-
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         OnBeforeSaveChanges();
