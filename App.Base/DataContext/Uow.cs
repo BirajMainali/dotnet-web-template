@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using App.Base.DataContext.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,12 +8,10 @@ namespace App.Base.DataContext
     public class Uow : IUow
     {
         public DbContext Context { get; }
-        private readonly IServiceProvider _serviceProvider;
 
-        public Uow(DbContext context, IServiceProvider serviceProvider)
+        public Uow(DbContext context)
         {
             Context = context;
-            _serviceProvider = serviceProvider;
         }
 
         public void Commit() => Context.SaveChanges();
@@ -23,8 +20,7 @@ namespace App.Base.DataContext
 
         public async Task CreateAsync<T>(T entity) => await Context.AddAsync(entity);
 
-        public async Task CreateRangeAsync<T>(IEnumerable<T> list) where T : class =>
-            await Context.AddRangeAsync(list);
+        public async Task CreateRangeAsync<T>(IEnumerable<T> list) where T : class => await Context.AddRangeAsync(list);
 
         public void Update<T>(T entity) => Context.Update(entity);
 
