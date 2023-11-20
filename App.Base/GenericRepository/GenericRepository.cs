@@ -53,7 +53,7 @@ namespace App.Base.GenericRepository
 
         public IQueryable<T> GetQueryable() => _dbSet.AsQueryable();
 
-        public Task<T> GetItemAsync(Expression<Func<T, bool>> predicate) =>
+        public Task<T?> GetItemAsync(Expression<Func<T, bool>> predicate) =>
             _context.Set<T>().FirstOrDefaultAsync(predicate);
 
         public T Find(long id) => _dbSet.Find(id);

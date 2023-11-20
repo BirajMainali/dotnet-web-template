@@ -21,7 +21,7 @@ public class AuthController : Controller
         _notyfService = notyfService;
         _userService = userService;
     }
-    
+
     public IActionResult Index() => View(new LoginVm());
 
     [HttpPost]
@@ -41,6 +41,7 @@ public class AuthController : Controller
             return View();
         }
     }
+
     [HttpGet]
     public IActionResult Register() => View(new UserVm());
 
@@ -50,9 +51,14 @@ public class AuthController : Controller
         try
         {
             var userDto = new UserDto(vm.Name, vm.Gender, vm.Email, vm.Password, vm.Address, vm.Phone);
-            await _userService.CreateUser(userDto);
-            _notyfService.Success("User Created Successfully");
-            return RedirectToAction(nameof(Index));
+            var result = await _userService.CreateUser(userDto);
+            if (result.IsSuccess)
+            {
+                _notyfService.Success("User Created Successfully");
+                return RedirectToAction(nameof(Index));
+            }
+            _notyfService.Error(result.Error);
+            return View(vm);
         }
         catch (Exception e)
         {

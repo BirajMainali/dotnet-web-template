@@ -11,7 +11,7 @@ namespace App.Base.GenericRepository.Interface
     {
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null);
         List<T> Get(Expression<Func<T, bool>> predicate);
-        Task<T> GetItemAsync(Expression<Func<T, bool>> predicate);
+        Task<T?> GetItemAsync(Expression<Func<T, bool>> predicate);
         Task<int> GetCountAsync(Expression<Func<T, bool>> predicate);
         Task<T> FindAsync(long id);
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);

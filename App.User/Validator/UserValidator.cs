@@ -1,4 +1,4 @@
-﻿using App.User.Exception;
+﻿using App.Base.Result;
 using App.User.Repositories.Interfaces;
 using App.User.Validator.Interfaces;
 
@@ -6,16 +6,16 @@ namespace App.User.Validator;
 
 public class UserValidator : IUserValidator
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserRepository _userRepo;
 
-    public UserValidator(IUserRepository userRepository)
+    public UserValidator(IUserRepository userRepo)
     {
-        _userRepository = userRepository;
+        _userRepo = userRepo;
     }
 
-    public async Task EnsureUniqueUserEmail(string email, long? id = null)
+    public async Task<Result<Model.User?>> EnsureUniqueUserEmail(string email, long? id = null)
     {
-        if (await _userRepository.IsEmailUsed(email, id))
-            throw new DuplicateUserException();
+        var emailUsed = await _userRepo.IsEmailUsed(email, id);
+        return emailUsed ? Result<Model.User>.Failure("Duplicate email found.") : Result<Model.User>.Success();
     }
 }
