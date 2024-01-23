@@ -95,14 +95,14 @@ public class ApplicationDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 entity.CreatedDate = DateTime.UtcNow;
-                entity.CreatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id");
+                entity.CreatedBy = Convert.ToInt64(_contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "0");
                 entry.State = EntityState.Modified;
             }
 
             if (entry.State == EntityState.Modified)
             {
                 entity.UpdatedDate = DateTime.UtcNow;
-                entity.UpdatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id");
+                entity.UpdatedBy = Convert.ToInt64(_contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "0");
             }
         }
     }
