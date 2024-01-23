@@ -1,10 +1,11 @@
 ﻿using App.User.Dto;
+using App.User.Entity;
 
 namespace App.User.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<Model.User> CreateUser(UserDto dto);
-    Task Update(Model.User user, UserDto dto);
-    Task Remove(Model.User user);
+    Task<AppUser> CreateUser(UserDto dto);
+    Task Update(AppUser appUser, UserDto dto);
+    Task Remove(AppUser appUser);
 }

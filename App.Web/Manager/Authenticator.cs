@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
+using App.Base.Repository;
 using App.User.Crypter;
-using App.User.Repositories.Interfaces;
+using App.User.Entity;
 using App.Web.Manager.Interfaces;
 using App.Web.ValueObject;
 using Microsoft.AspNetCore.Authentication;
@@ -8,12 +9,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace App.Web.Manager;
 
-public class AuthManager : IAuthManager
+public class Authenticator : IAuthManager
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<AppUser, long> _userRepository;
 
-    public AuthManager(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
+    public Authenticator(IHttpContextAccessor httpContextAccessor, IRepository<AppUser, long> userRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;

@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
-using App.User.Repositories.Interfaces;
+using App.Base.Repository;
+using App.User.Entity;
 using App.Web.Providers.Interfaces;
 
 namespace App.Web.Providers;
@@ -7,21 +8,20 @@ namespace App.Web.Providers;
 public class CurrentUserProvider : ICurrentUserProvider
 {
     private readonly IHttpContextAccessor _contextAccessor;
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<AppUser, long> _userRepository;
 
-    public CurrentUserProvider(IHttpContextAccessor contextAccessor, IUserRepository userRepository)
+    public CurrentUserProvider(IHttpContextAccessor contextAccessor, IRepository<AppUser, long> userRepository)
     {
         _contextAccessor = contextAccessor;
         _userRepository = userRepository;
     }
 
-    public bool IsLoggedIn() 
-        => GetCurrentUserId() != null;
+    public bool IsLoggedIn() => GetCurrentUserId() != null;
 
-    public async Task<App.User.Model.User> GetCurrentUser()
+    public async Task<AppUser> GetCurrentUser()
     {
         var userId = GetCurrentUserId();
-        if (userId.HasValue) return await _userRepository.FindOrThrowAsync(userId.Value);
+        if (userId.HasValue) return await _userRepository.FindOrThrowAsync(userId.Value, "User not found");
         return null;
     }
 

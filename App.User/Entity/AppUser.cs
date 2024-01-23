@@ -1,10 +1,9 @@
-﻿using App.Base.GenericModel.Interfaces;
+﻿using App.Base.Entities;
 
-namespace App.User.Model;
+namespace App.User.Entity;
 
-public class User : IGenericModel
+public class AppUser : FullAuditedEntity<long>
 {
-    public long Id { get; set; }
     public string Name { get; protected set; }
     public string Gender { get; protected set; }
     public string Email { get; protected set; }
@@ -12,15 +11,16 @@ public class User : IGenericModel
     public string Address { get; protected set; }
     public string Phone { get; protected set; }
 
-    public User()
+    public AppUser()
     {
     }
 
-    public User(string name, string gender, string email, string password, string address, string phone) 
+    public AppUser(string name, string gender, string email, string password, string address, string phone)
         => Copy(name, gender, email, password, address, phone);
 
     public void Update(string name, string gender, string email, string password, string address, string phone)
         => Copy(name, gender, email, password, address, phone);
+
     private void Copy(string name, string gender, string email, string password, string address, string phone)
     {
         Name = name;
@@ -30,5 +30,4 @@ public class User : IGenericModel
         Address = address;
         Phone = phone;
     }
-
 }

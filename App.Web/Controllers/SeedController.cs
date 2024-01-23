@@ -1,5 +1,6 @@
-﻿using App.User.Dto;
-using App.User.Repositories.Interfaces;
+﻿using App.Base.Repository;
+using App.User.Dto;
+using App.User.Entity;
 using App.User.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,23 +11,24 @@ namespace App.Web.Controllers;
 public class SeedController : Controller
 {
     private readonly IUserService _userService;
-    private readonly IUserRepository _userRepo;
+    private readonly IRepository<AppUser, long> _userRepo;
 
-    public SeedController(IUserService userService, IUserRepository userRepo)
+    public SeedController(IUserService userService, IRepository<AppUser, long> userRepo)
     {
         _userService = userService;
         _userRepo = userRepo;
     }
-    
+
     public async Task<IActionResult> SeedAdmin()
     {
         try
         {
-            if (await _userRepo.CheckIfExistAsync(x=> x.Email == "admin@gmail.com"))
+            if (await _userRepo.CheckIfExistAsync(x => x.Email == "admin@gmail.com"))
             {
                 throw new Exception("Admin already exist");
             }
-            var dto = new UserDto("Admin", "Male","admin@gmail.com","admin@123","Mechi, Nepal", "100000000");
+
+            var dto = new UserDto("Admin", "Male", "admin@gmail.com", "admin@123", "Mechi, Nepal", "100000000");
             await _userService.CreateUser(dto);
             return Ok(new
             {

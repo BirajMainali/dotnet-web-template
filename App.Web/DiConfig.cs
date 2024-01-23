@@ -38,6 +38,6 @@ public static class ApplicationDiConfig
 
         builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>()
             .AddScoped<DbContext, ApplicationDbContext>()
-            .AddScoped<IAuthManager, AuthManager>().AddHttpContextAccessor();
+            .AddScoped<IAuthManager, Authenticator>().AddHttpContextAccessor();
     }
 }

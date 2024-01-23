@@ -1,9 +1,11 @@
 using System.Reflection;
 using System.Security.Claims;
-using App.Base.GenericModel;
-using App.Base.GenericModel.Interfaces;
+using App.Base.Constants;
+using App.Base.Entities;
 using App.User;
+using App.Web.Providers.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace App.Web.Data;
@@ -13,7 +15,9 @@ public class ApplicationDbContext : DbContext
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IWebHostEnvironment _env;
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor contextAccessor, IWebHostEnvironment env) :
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options,
+        IHttpContextAccessor contextAccessor, IWebHostEnvironment env) :
         base(options)
     {
         _contextAccessor = contextAccessor;
@@ -24,7 +28,6 @@ public class ApplicationDbContext : DbContext
     {
         builder.AddUser();
         AddSafeDeleteGlobalQuery(builder);
-        //builder.ConfigureUserTableName();
         base.OnModelCreating(builder);
     }
 
@@ -50,22 +53,57 @@ public class ApplicationDbContext : DbContext
         }
     }
 
-    public void SetGlobalQuery<T>(ModelBuilder builder) where T : GenericModel
+    public void SetGlobalQuery<T>(ModelBuilder builder) where T : FullAuditedEntity<object>
     {
         builder.Entity<T>().HasQueryFilter(e => e.RecStatus.Equals('A'));
     }
 
     private static readonly MethodInfo SetGlobalQueryMethod = typeof(ApplicationDbContext)
         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-        .Single(t => t.IsGenericMethod && t.Name == "SetGlobalQuery");
+        .Single(t => t.IsGenericMethod && t.Name == nameof(SetGlobalQuery));
 
     private void AddSafeDeleteGlobalQuery(ModelBuilder builder)
     {
         foreach (var type in builder.Model.GetEntityTypes())
         {
-            if (type.BaseType != null || !typeof(ISoftDelete).IsAssignableFrom(type.ClrType)) continue;
+            if (type.BaseType != null || !typeof(FullAuditedEntity<>).IsAssignableFrom(type.ClrType)) continue;
             var method = SetGlobalQueryMethod.MakeGenericMethod(type.ClrType);
             method.Invoke(this, new object[] { builder });
+        }
+    }
+
+    public override int SaveChanges()
+    {
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            AddAuditLog(entry);
+        }
+
+        return base.SaveChanges();
+    }
+
+    private void AddAuditLog(EntityEntry entry)
+    {
+        if (entry.Entity is FullAuditedEntity<object> entity)
+        {
+            if (entry.State == EntityState.Deleted)
+            {
+                entity.RecStatus = Status.Active;
+                entry.State = EntityState.Modified;
+            }
+
+            if (entry.State == EntityState.Added)
+            {
+                entity.CreatedDate = DateTime.UtcNow;
+                entity.CreatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id");
+                entry.State = EntityState.Modified;
+            }
+
+            if (entry.State == EntityState.Modified)
+            {
+                entity.UpdatedDate = DateTime.UtcNow;
+                entity.UpdatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id");
+            }
         }
     }
 
@@ -73,35 +111,9 @@ public class ApplicationDbContext : DbContext
     {
         foreach (var entry in ChangeTracker.Entries())
         {
-            var entity = entry.Entity;
-            if (entry.State != EntityState.Deleted || entity is not ISoftDelete) continue;
-            entry.State = EntityState.Modified;
-            entity.GetType().GetProperty("RecStatus")?.SetValue(entity, 'D');
+            AddAuditLog(entry);
         }
 
         return base.SaveChangesAsync(cancellationToken);
-    }
-
-    public override int SaveChanges()
-    {
-        foreach (var entry in ChangeTracker.Entries())
-        {
-            var entity = entry.Entity;
-            if (entry.State != EntityState.Deleted || entity is not ISoftDelete) continue;
-            entry.State = EntityState.Modified;
-            entry.GetType().GetProperty("RecStatus")?.SetValue(entity, 'D');
-            if (entry.State == EntityState.Added)
-            {
-                var userId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                entry.GetType().GetProperty("RecById")?.SetValue(entity, userId);
-            }
-
-            if (entry.State == EntityState.Modified)
-            {
-                entry.GetType().GetProperty("UpdatedDate")?.SetValue(entity, DateTime.UtcNow);
-            }
-        }
-
-        return base.SaveChanges();
     }
 }

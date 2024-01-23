@@ -1,8 +1,10 @@
-﻿namespace App.Web.Providers.Interfaces;
+﻿using App.User.Entity;
+
+namespace App.Web.Providers.Interfaces;
 
 public interface ICurrentUserProvider
 {
     bool IsLoggedIn();
-    Task<App.User.Model.User> GetCurrentUser();
+    Task<AppUser> GetCurrentUser();
     long? GetCurrentUserId();
 }
