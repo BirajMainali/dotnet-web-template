@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "VehicleManagement.Web": {
+    "App.Web": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

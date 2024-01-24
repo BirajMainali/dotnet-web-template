@@ -1,5 +1,5 @@
-﻿using App.Base;
-using App.User;
+﻿using App.Base.Repository;
+using App.Base.Settings;
 using App.Web.Data;
 using App.Web.Manager;
 using App.Web.Manager.Interfaces;
@@ -8,6 +8,7 @@ using App.Web.Providers.Interfaces;
 using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace App.Web;
 
@@ -21,6 +22,8 @@ public static class ApplicationDiConfig
 
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+        builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" }); });
+
         builder.Services.AddNotyf(config =>
         {
             config.DurationInSeconds = 10;
@@ -28,16 +31,18 @@ public static class ApplicationDiConfig
             config.Position = NotyfPosition.BottomRight;
         });
 
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(x => { x.LoginPath = "/Auth"; });
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x => { x.LoginPath = "/Auth"; });
 
-        builder.Services.UseUserConfiguration()
-            .UseBase();
 
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
         builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>()
             .AddScoped<DbContext, ApplicationDbContext>()
-            .AddScoped<IAuthManager, Authenticator>().AddHttpContextAccessor();
+            .AddScoped<IAuthenticator, Authenticator>().AddHttpContextAccessor();
+
+        builder.Services.Configure<AppSettings>(builder.Configuration);
+        builder.Services.ConfigureServices();
+
+        builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
     }
 }

@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace App.Base.Extensions
 {
@@ -11,8 +11,37 @@ namespace App.Base.Extensions
                 return input;
             }
 
-            var startUnderscores = Regex.Match(input, @"^_+");
-            return startUnderscores + Regex.Replace(input, @"([a-z0-9])([A-Z])", "$1_$2").ToLower();
+            var snakeCase = string.Concat(input.Select((x, i) =>
+            {
+                if (i > 0 && char.IsUpper(x))
+                {
+                    return "_" + char.ToLower(x);
+                }
+                else if (char.IsWhiteSpace(x))
+                {
+                    return "_";
+                }
+
+                return char.ToLower(x).ToString();
+            }));
+
+            return snakeCase;
         }
+
+        public static string IgnoreCase(this string str)
+        {
+            return str.Trim().ToLower();
+        }
+
+        public static string Or(this string str, string or)
+        {
+            return string.IsNullOrEmpty(str) ? or : str;
+        }
+
+        public static string ValueOrProvided(this string str, string defaultValue = "")
+            => string.IsNullOrEmpty(str) ? defaultValue : str;
+
+        public static string ValueOrNull(this string str)
+            => str.ValueOrProvided(null);
     }
 }

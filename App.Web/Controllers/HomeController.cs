@@ -5,6 +5,7 @@ using App.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace App.Web.Controllers;
 
@@ -22,8 +23,7 @@ public class HomeController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
-        var users = await _userRepo.GetQueryable().Select(x=> x.Email).ToListAsync();
-        return View(users);
+        return View();
     }
 
     public IActionResult Privacy()

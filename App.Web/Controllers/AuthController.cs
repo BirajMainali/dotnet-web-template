@@ -11,13 +11,13 @@ namespace App.Web.Controllers;
 [AllowAnonymous]
 public class AuthController : Controller
 {
-    private readonly IAuthManager _authManager;
+    private readonly IAuthenticator _authenticator;
     private readonly INotyfService _notyfService;
     private readonly IUserService _userService;
 
-    public AuthController(IAuthManager authManager, INotyfService notyfService, IUserService userService)
+    public AuthController(IAuthenticator authenticator, INotyfService notyfService, IUserService userService)
     {
-        _authManager = authManager;
+        _authenticator = authenticator;
         _notyfService = notyfService;
         _userService = userService;
     }
@@ -29,7 +29,7 @@ public class AuthController : Controller
     {
         try
         {
-            var result = await _authManager.Login(vm.Email, vm.Password);
+            var result = await _authenticator.Login(vm.Email, vm.Password);
             if (result.Success) return RedirectToAction("Index", "Home");
             ModelState.AddModelError(nameof(vm.Password), result.Errors.FirstOrDefault()!);
             vm.Password = "";

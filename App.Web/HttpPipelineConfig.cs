@@ -1,5 +1,9 @@
 ﻿using App.Base.Providers;
+using App.Base.Settings;
+using App.Web.Middlewares;
 using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace App.Web;
 
@@ -9,6 +13,8 @@ public static class HttpPipelineConfig
     {
         if (app.Environment.IsDevelopment())
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App.Web v1"));
             app.UseMigrationsEndPoint();
         }
         else
@@ -27,6 +33,15 @@ public static class HttpPipelineConfig
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        var useMultiTenant = app.Services.GetService<IOptions<AppSettings>>()!.Value.UseMultiTenancy;
+
+        if (useMultiTenant)
+        {
+            app.UseMultiTenant();
+        }
+
+
         app.UseNotyf();
         app.MapControllerRoute(
             name: "areaRoute",

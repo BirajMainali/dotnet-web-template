@@ -25,5 +25,5 @@ public interface IRepository<T, in TKey> where T : class
 
     IQueryable<T?> GetQueryable();
 
-    Task<T> FindOrThrowAsync(TKey id, string message);
+    Task<T> FindOrThrowAsync(TKey id);
 }

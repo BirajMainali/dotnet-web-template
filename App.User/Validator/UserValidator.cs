@@ -16,9 +16,9 @@ public class UserValidator : IUserValidator
 
     public async Task EnsureUniqueUserEmail(string email, long? id = null)
     {
-        if (await _userRepository.CheckIfExistAsync(x => (id != null || x.Id == id) && x.Email == email))
+        if (await _userRepository.CheckIfExistAsync(x => x.Email == email && (!id.HasValue || x.Id != id.Value)))
         {
-            throw new DuplicateUserException();
+            throw new DuplicateUserException("Email already exist");
         }
     }
 }

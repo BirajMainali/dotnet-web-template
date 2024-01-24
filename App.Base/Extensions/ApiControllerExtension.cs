@@ -4,7 +4,7 @@ namespace App.Base.Extensions
 {
     public static class ApiControllerExtension
     {
-        public static IActionResult SendSuccess(this Controller controller, string notify, object data = null)
+        public static IActionResult SendSuccess(this ControllerBase controller, string notify, object data = null)
         {
             return controller.Ok(new
             {
@@ -13,7 +13,7 @@ namespace App.Base.Extensions
             });
         }
 
-        public static IActionResult SendError(this Controller controller, string error)
+        public static IActionResult SendError(this ControllerBase controller, string error)
         {
             return controller.BadRequest(new
             {
