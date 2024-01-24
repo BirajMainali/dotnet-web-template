@@ -28,16 +28,14 @@ public static class ApplicationDiConfig
             config.Position = NotyfPosition.BottomRight;
         });
 
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(x => { x.LoginPath = "/Auth"; });
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x => { x.LoginPath = "/Auth"; });
 
-        builder.Services.UseUserConfiguration()
-            .UseBase();
+        builder.Services.UseBase();
 
         builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
         builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>()
             .AddScoped<DbContext, ApplicationDbContext>()
-            .AddScoped<IAuthManager, Authenticator>().AddHttpContextAccessor();
+            .AddScoped<IAuthenticator, Authenticator>().AddHttpContextAccessor();
     }
 }

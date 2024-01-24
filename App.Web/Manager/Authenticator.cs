@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using App.Base.Constants;
 using App.Base.Repository;
 using App.User.Crypter;
 using App.User.Entity;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace App.Web.Manager;
 
-public class Authenticator : IAuthManager
+public class Authenticator : IAuthenticator
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IRepository<AppUser, long> _userRepository;
@@ -41,7 +42,8 @@ public class Authenticator : IAuthManager
         var httpContext = _httpContextAccessor.HttpContext;
         var claims = new List<Claim>
         {
-            new("Id", user.Id.ToString())
+            new(AuthenticationKeyConstants.AuthenticationKey, user.Id.ToString()),
+            new(AuthenticationKeyConstants.MultiTenantAuthenticationKey, user.Email),
         };
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

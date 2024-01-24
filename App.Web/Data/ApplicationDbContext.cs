@@ -3,7 +3,6 @@ using System.Security.Claims;
 using App.Base.Constants;
 using App.Base.Entities;
 using App.User;
-using App.Web.Providers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
@@ -95,14 +94,14 @@ public class ApplicationDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 entity.CreatedDate = DateTime.UtcNow;
-                entity.CreatedBy = Convert.ToInt64(_contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "0");
+                entity.CreatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "~";
                 entry.State = EntityState.Modified;
             }
 
             if (entry.State == EntityState.Modified)
             {
                 entity.UpdatedDate = DateTime.UtcNow;
-                entity.UpdatedBy = Convert.ToInt64(_contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "0");
+                entity.UpdatedBy = _contextAccessor.HttpContext?.User.FindFirstValue("Id") ?? "~";
             }
         }
     }

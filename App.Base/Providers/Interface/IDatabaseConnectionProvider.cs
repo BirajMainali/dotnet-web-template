@@ -2,8 +2,9 @@
 
 namespace App.Base.Providers.Interface
 {
-    public interface IConnectionProvider
+    public interface IDatabaseConnectionProvider
     {
         NpgsqlConnection GetConnection();
+        string GetConnection(string databaseName);
     }
 }

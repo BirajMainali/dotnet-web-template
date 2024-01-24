@@ -8,5 +8,4 @@ builder.UseApp();
 
 var app = builder.Build();
 app.Services.CreateScope().ServiceProvider.GetService<ApplicationDbContext>()?.Database.Migrate();
-app.ConfigurePipeline()
-    .Run();
+app.ConfigurePipeline().Run();

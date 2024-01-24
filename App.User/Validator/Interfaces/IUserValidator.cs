@@ -1,6 +1,8 @@
-﻿namespace App.User.Validator.Interfaces;
+﻿using App.Base.Configurations;
 
-public interface IUserValidator
+namespace App.User.Validator.Interfaces;
+
+public interface IUserValidator : IScopedDependency
 {
     Task EnsureUniqueUserEmail(string email, long? id = null);
 }

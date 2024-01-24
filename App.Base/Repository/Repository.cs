@@ -40,14 +40,20 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
 
     public virtual IQueryable<T?> GetQueryable() => _dbSet.AsQueryable();
 
-    public virtual async Task<T> FindOrThrowAsync(TKey id, string message)
+    public async Task<T> FindOrThrowAsync(TKey id, Func<T?, Exception> exception)
+    {
+        var entity = await FindByAsync(id);
+        if (entity == null) throw exception(entity);
+        return entity;
+    }
+
+    public async Task<T> FindOrThrowAsync(TKey id)
     {
         var entity = await FindByAsync(id);
         if (entity == null)
         {
-            throw new Exception(message);
+            throw new KeyNotFoundException($"Entity with key {id} was not found.");
         }
-
         return entity;
     }
 }

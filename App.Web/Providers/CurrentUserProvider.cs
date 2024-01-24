@@ -21,7 +21,7 @@ public class CurrentUserProvider : ICurrentUserProvider
     public async Task<AppUser> GetCurrentUser()
     {
         var userId = GetCurrentUserId();
-        if (userId.HasValue) return await _userRepository.FindOrThrowAsync(userId.Value, "User not found");
+        if (userId.HasValue) return await _userRepository.FindOrThrowAsync(userId.Value);
         return null;
     }
 

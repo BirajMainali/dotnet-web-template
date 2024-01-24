@@ -16,7 +16,7 @@ namespace App.Base.Helper
             var extension = Path.GetExtension(recordVo.File.FileName);
             var encryptedFileName = Guid.NewGuid() + extension;
             var filePath = Path.Combine(path, encryptedFileName);
-            await using var stream = new FileStream(filePath, FileMode.Create); 
+            await using var stream = new FileStream(filePath, FileMode.Create);
             await recordVo.File.CopyToAsync(stream);
             return encryptedFileName;
         }

@@ -2,7 +2,7 @@
 
 namespace App.Web.Manager.Interfaces;
 
-public interface IAuthManager
+public interface IAuthenticator
 {
     Task<AuthResult> Login(string identity, string password);
 }

@@ -1,5 +1,8 @@
 ﻿using App.Base.Providers;
+using App.Base.Settings;
+using App.Web.Middlewares;
 using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.Extensions.Options;
 
 namespace App.Web;
 
@@ -27,6 +30,15 @@ public static class HttpPipelineConfig
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+
+        var useMultiTenant = app.Services.GetService<IOptions<AppSettings>>()!.Value.UseMultiTenancy;
+
+        if (useMultiTenant)
+        {
+            app.UseMultiTenant();
+        }
+
+
         app.UseNotyf();
         app.MapControllerRoute(
             name: "areaRoute",
