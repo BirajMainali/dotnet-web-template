@@ -39,11 +39,13 @@ public class Authenticator : IAuthenticator
             return result;
         }
 
+        var connectionKey = user.ParentUserId.HasValue ? user.ParentUser!.Email : user.Email;
+
         var httpContext = _httpContextAccessor.HttpContext;
         var claims = new List<Claim>
         {
             new(AuthenticationKeyConstants.AuthenticationKey, user.Id.ToString()),
-            new(AuthenticationKeyConstants.MultiTenantAuthenticationKey, user.Email),
+            new(AuthenticationKeyConstants.MultiTenantAuthenticationKey, connectionKey)
         };
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,

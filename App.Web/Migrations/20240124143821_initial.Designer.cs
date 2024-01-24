@@ -3,6 +3,7 @@ using System;
 using App.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240124143821_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +43,7 @@ namespace App.Web.Migrations
                         .HasColumnName("address");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("created_by");
 
@@ -89,6 +93,7 @@ namespace App.Web.Migrations
                         .HasColumnName("tenant_id1");
 
                     b.Property<string>("UpdatedBy")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("updated_by");
 
@@ -116,6 +121,7 @@ namespace App.Web.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("created_by");
 
@@ -138,6 +144,7 @@ namespace App.Web.Migrations
                         .HasColumnName("rec_status");
 
                     b.Property<string>("UpdatedBy")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("updated_by");
 

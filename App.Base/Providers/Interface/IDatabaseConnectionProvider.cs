@@ -1,10 +1,11 @@
-﻿using Npgsql;
+﻿using App.Base.Configurations;
+using Npgsql;
 
 namespace App.Base.Providers.Interface
 {
-    public interface IDatabaseConnectionProvider
+    public interface IDatabaseConnectionProvider : IScopedDependency
     {
         NpgsqlConnection GetConnection();
-        string GetConnection(string databaseName);
+        string GetConnectionString(string databaseName);
     }
 }

@@ -1,13 +1,7 @@
-﻿@model List<string>
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    @foreach (var item in Model)
-    {
-        <br/>
-        <p>@item</p>
-    }
-</div>
+<a href="/swagger" class="btn btn-danger btn-sm">
+    View Swagger UI
+</a>

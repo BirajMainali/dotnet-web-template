@@ -1,33 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using App.Base.Configurations;
-using App.Base.DataContext;
-using App.Base.DataContext.Interfaces;
-using App.Base.Providers;
-using App.Base.Providers.Interface;
-using App.Base.Repository;
-using App.Base.Settings;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace App.Base
+namespace App.Web
 {
-    public static class DiConfig
+    public static class ConfigureServicesFromAssembly
     {
-        public static IServiceCollection UseBase(this IServiceCollection services)
+        public static void ConfigureServices(this IServiceCollection services)
         {
-            services.AddScoped<IDatabaseConnectionProvider, DatabaseConnectionProvider>().AddScoped<IUow, Uow>();
-            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var loadedPaths = loadedAssemblies.Select(a => a.Location).ToArray();
 
-            return services;
-        }
+            var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            var toLoad = referencedPaths.Where(r => !loadedPaths.Contains(r, StringComparer.InvariantCultureIgnoreCase)).ToList();
+            toLoad.ForEach(path => loadedAssemblies.Add(AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName(path))));
 
-        private static void ConfigureServices(IServiceCollection services)
-        {
-            var assemblyString = Assembly.GetExecutingAssembly().GetName().Name;
-            if (assemblyString != null)
+            foreach (var assembly in loadedAssemblies)
             {
-                var assembly = AppDomain.CurrentDomain.Load(assemblyString);
                 foreach (var type in assembly.GetTypes())
                 {
                     if (typeof(ITransientDependency).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Base.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Base.DataContext.Interfaces
 {
-    public interface IUow
+    public interface IUow : IScopedDependency
     {
         DbContext Context { get; }
         void Commit();
@@ -15,6 +16,5 @@ namespace App.Base.DataContext.Interfaces
         void UpdateRange<T>(IEnumerable<T> list) where T : class;
         void Remove<T>(T entity);
         void RemoveRange<T>(IEnumerable<T> list) where T : class;
-
     }
 }

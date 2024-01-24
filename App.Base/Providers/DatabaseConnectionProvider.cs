@@ -25,7 +25,7 @@ namespace App.Base.Providers
             return new NpgsqlConnection(defaultConnection);
         }
 
-        public string GetConnection(string databaseName)
+        public string GetConnectionString(string databaseName)
         {
             var defaultConnection = _appSettings.Value.ConnectionStrings.DefaultConnection;
             var builder = new NpgsqlConnectionStringBuilder(defaultConnection)

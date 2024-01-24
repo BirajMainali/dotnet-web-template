@@ -45,7 +45,7 @@ public class MultiTenantResolverMiddleware
 
                 context.Items[ClaimsConstants.ProtectedClaimsHttpClaimKey] = convertedObjects;
                 protectedClaimProvider.Cache(convertedObjects);
-                var connectionString = databaseConnectionProvider.GetConnection(convertedObjects[AuthenticationKeyConstants.MultiTenantAuthenticationKey]);
+                var connectionString = databaseConnectionProvider.GetConnectionString(convertedObjects[AuthenticationKeyConstants.MultiTenantAuthenticationKey]);
                 dbContext.Database.SetConnectionString(connectionString);
             }
         }

@@ -3,6 +3,7 @@ using App.Base.Settings;
 using App.Web.Middlewares;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace App.Web;
 
@@ -12,6 +13,8 @@ public static class HttpPipelineConfig
     {
         if (app.Environment.IsDevelopment())
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "App.Web v1"));
             app.UseMigrationsEndPoint();
         }
         else

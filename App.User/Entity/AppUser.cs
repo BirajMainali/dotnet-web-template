@@ -4,7 +4,7 @@ namespace App.User.Entity;
 
 public class AppUser : FullAuditedEntity<long>
 {
-    public ApplicationTenant? Tenant { get; protected set; }
+    public virtual ApplicationTenant? Tenant { get; protected set; }
     public long? TenantId { get; protected set; }
     public string Name { get; protected set; }
     public string Gender { get; protected set; }
@@ -13,7 +13,7 @@ public class AppUser : FullAuditedEntity<long>
     public string Address { get; protected set; }
     public string Phone { get; protected set; }
 
-    public AppUser? ParentUser { get; protected set; }
+    public virtual AppUser? ParentUser { get; protected set; }
     public long? ParentUserId { get; protected set; }
 
     public AppUser SetTenant(ApplicationTenant tenant)
