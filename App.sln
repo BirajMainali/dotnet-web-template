@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.User", "App.User\App.Us
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Web", "App.Web\App.Web.csproj", "{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NepaliDateConverter", "nepali-date-converter\NepaliDateConverter\NepaliDateConverter.csproj", "{51577614-E6D1-4900-A1B7-9687AB344113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91BB1A20-FF5B-4D78-A071-EFB0F91ACC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51577614-E6D1-4900-A1B7-9687AB344113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51577614-E6D1-4900-A1B7-9687AB344113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51577614-E6D1-4900-A1B7-9687AB344113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51577614-E6D1-4900-A1B7-9687AB344113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

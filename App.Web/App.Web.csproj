@@ -34,6 +34,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\App.User\App.User.csproj" />
+      <ProjectReference Include="..\nepali-date-converter\NepaliDateConverter\NepaliDateConverter.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -54,5 +55,9 @@
 
     <ItemGroup>
       <None Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Shared\BreadcrumbVc\Default.cshtml" />
     </ItemGroup>
 </Project>

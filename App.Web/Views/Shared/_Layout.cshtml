@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - App.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/VehicleManagement.Web.styles.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/nepali-date-picker/nepaliDatePicker.css" asp-append-version="true">
 </head>
 <body>
 <header>
@@ -43,6 +43,7 @@
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/nepali-date-picker/jquery.nepaliDatePicker.js" asp-append-version="true" defer="defer"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

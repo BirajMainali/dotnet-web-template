@@ -1,0 +1,9 @@
+@model App.Web.ViewComponents.DateInputVm
+
+<input data-actual-name="@Model.Name" name="__@Model.Name" type="text" class="form-control mb-nep-date-picker" required="@Model.Required"
+       value="@Model.Value"
+       @(string.IsNullOrEmpty(Model.ElmId) ? "" : $"id=__{Model.ElmId}")
+       >
+<input type="hidden" name="@Model.Name" value="@Model.EnglishValue" class="mb-nep-date-picker-hidden-elm"
+       @(string.IsNullOrEmpty(Model.ElmId) ? "" : $"id={Model.ElmId}")
+>

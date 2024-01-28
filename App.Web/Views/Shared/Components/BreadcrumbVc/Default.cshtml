@@ -1,0 +1,16 @@
+﻿@model string[]
+
+<nav aria-label="breadcrumb" class="breadcrumb-wrapper">
+    @* d-flex align-items-center justify-content-between *@
+    <ol class="breadcrumb">
+        @{
+            var length = Model.Length;
+            for (var i = 0; i < length; i++)
+            {
+                <li class="breadcrumb-item @(i == length - 1 ? "active" : "")">
+                    @Model[i]
+                </li>
+            }
+        }
+    </ol>
+</nav>
