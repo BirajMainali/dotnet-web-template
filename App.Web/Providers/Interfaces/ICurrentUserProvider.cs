@@ -7,4 +7,5 @@ public interface ICurrentUserProvider
     bool IsLoggedIn();
     Task<AppUser> GetCurrentUser();
     long? GetCurrentUserId();
+    string GetCurrentConnectionKey();
 }

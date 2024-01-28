@@ -4,7 +4,7 @@ namespace App.User.Manager;
 
 public interface IMultiTenantClaimManager : IScopedDependency
 {
-    string SaveClaims(Dictionary<string, string> claims);
-    string GetClaimsFromRequest();
+    string GetProtectedClaim(string key);
+    string GetMultiTenantConnectionKey();
     void RemoveClaims();
 }

@@ -24,28 +24,20 @@ public class MultiTenantResolverMiddleware
     {
         try
         {
-            var data = multiTenantClaimManager.GetClaimsFromRequest();
+            var connectionKey = multiTenantClaimManager.GetMultiTenantConnectionKey();
             var isAuthorized = context.User.Identity.IsAuthenticated || currentUserProvider.IsLoggedIn();
             if (!isAuthorized)
             {
                 multiTenantClaimManager.RemoveClaims();
             }
 
-            if (isAuthorized && data == null)
+            if (isAuthorized && connectionKey == null)
             {
                 throw new Exception("Invalid token");
             }
             else if (isAuthorized)
             {
-                var convertedObjects = protectedClaimProvider.ToProtectedClaims(data);
-                if (!convertedObjects.ContainsKey(AuthenticationKeyConstants.MultiTenantAuthenticationKey))
-                {
-                    throw new Exception("No connect to data");
-                }
-
-                context.Items[ClaimsConstants.ProtectedClaimsHttpClaimKey] = convertedObjects;
-                protectedClaimProvider.Cache(convertedObjects);
-                var connectionString = databaseConnectionProvider.GetConnectionString(convertedObjects[AuthenticationKeyConstants.MultiTenantAuthenticationKey]);
+                var connectionString = databaseConnectionProvider.GetConnectionString(connectionKey);
                 dbContext.Database.SetConnectionString(connectionString);
             }
         }

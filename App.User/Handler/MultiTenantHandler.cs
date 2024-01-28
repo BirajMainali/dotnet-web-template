@@ -7,7 +7,6 @@ using App.User.Dto;
 using App.User.Entity;
 using App.User.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -39,41 +38,44 @@ public class MultiTenantHandler : IMultiTenantHandler
     {
         tenantName = tenantName.IgnoreCase();
         _logger.LogInformation("Request to create user {@dto} for tenant {tenantName}", dto, tenantName);
-        var user = await ResolveUser(dto, tenantName);
-        await ConfigureDatabaseIfRequired(dto, tenantName);
+        var (user, tenant) = await ResolveUser(dto, tenantName);
+        await ConfigureDatabaseIfRequired(tenant: tenant, user);
         _logger.LogInformation("User created {@user}", user);
         return user;
     }
 
-    private async Task ConfigureDatabaseIfRequired(UserDto dto, string tenantName)
+    private async Task ConfigureDatabaseIfRequired(ApplicationTenant? tenant, AppUser user)
     {
         if (_options.Value.UseMultiTenancy)
         {
-            _logger.LogInformation("Request to create user {@dto} for tenant {tenantName}", dto, tenantName);
-            var connectionString = _databaseConnectionProvider.GetConnectionString(tenantName.ToSnakeCase());
+            _logger.LogInformation("Request to create user {@dto} for tenant {tenantName}", user, tenant!.Name);
+            var connectionString = _databaseConnectionProvider.GetConnectionString(tenant.Name.ToSnakeCase());
             _context.Database.SetConnectionString(connectionString);
             _logger.LogInformation("Connection string set to {connectionString}", connectionString);
             await _context.Database.MigrateAsync();
             _logger.LogInformation("Database migrated");
-            _logger.LogInformation("Connection string set to {connectionString}", tenantName.ToSnakeCase());
-            await ResolveUser(dto, tenantName);
+            _logger.LogInformation("Connection string set to {connectionString}", tenant.Name.ToSnakeCase());
+            await _uow.CreateAsync(user);
+            await _uow.CreateAsync(tenant);
+            user.SetTenant(tenant);
+            await _uow.CommitAsync();
         }
     }
 
-    private async Task<AppUser> ResolveUser(UserDto dto, string tenantName)
+    private async Task<(AppUser user, ApplicationTenant? applicationTenant)> ResolveUser(UserDto dto, string tenantName)
     {
         using var tsc = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         var user = await _userService.CreateUser(dto);
+        ApplicationTenant applicationTenant = null;
         if (_options.Value.UseMultiTenancy)
         {
-            var applicationTenant = new ApplicationTenant(tenantName, tenantName.ToSnakeCase());
+            applicationTenant = new ApplicationTenant(tenantName, tenantName.ToSnakeCase());
             await _uow.CreateAsync(applicationTenant);
             user.SetTenant(applicationTenant);
-            return user;
         }
 
         await _uow.CommitAsync();
         tsc.Complete();
-        return user;
+        return (user, applicationTenant);
     }
 }

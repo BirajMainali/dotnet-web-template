@@ -14,7 +14,7 @@ public class MultiTenantClaimManager : IMultiTenantClaimManager
     private readonly IDataProtectionProvider _dataProtector;
     private readonly IOptions<AppSettings> _options;
 
-    private readonly string _extraClaimsKey = ClaimsConstants.ProtectedClaimsKey;
+    private readonly string _extraClaimsKey = AuthenticationKeyConstants.MultiTenantAuthenticationKey;
 
     public MultiTenantClaimManager(IHttpContextAccessor httpContextAccessor, IDataProtectionProvider dataProtector, IOptions<AppSettings> options)
     {
@@ -23,39 +23,19 @@ public class MultiTenantClaimManager : IMultiTenantClaimManager
         _options = options;
     }
 
-    public string SaveClaims(Dictionary<string, string> claims)
+    public string GetProtectedClaim(string key)
     {
-        var claimsSerialized = claims.ToJson();
         var protector = _dataProtector.CreateProtector(ResolvePurpose(_extraClaimsKey));
-        var protectedClaims = protector.Protect(claimsSerialized);
-        _httpContextAccessor.HttpContext?.Response.Cookies.Append(_extraClaimsKey, protectedClaims, new()
-        {
-            Expires = DateTimeOffset.Now.AddDays(2),
-            HttpOnly = true,
-            IsEssential = true
-        });
+        var protectedClaims = protector.Protect(key);
         return protectedClaims;
     }
 
-    public string GetClaimsFromRequest()
+    public string GetMultiTenantConnectionKey()
     {
-        string value;
-        if (!_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(_extraClaimsKey, out value))
-        {
-            StringValues header;
-            if (_httpContextAccessor.HttpContext.Request.Headers.TryGetValue(_extraClaimsKey, out header))
-            {
-                value = header.FirstOrDefault();
-            }
-        }
-
-        if (value.ValueOrNull() == null)
-        {
-            return null;
-        }
-
+        var value = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == _extraClaimsKey);
+        if (value == null) return null;
         var protector = _dataProtector.CreateProtector(ResolvePurpose(_extraClaimsKey));
-        return protector.Unprotect(value);
+        return protector.Unprotect(value.Value);
     }
 
     public void RemoveClaims()
