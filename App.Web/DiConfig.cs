@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NepaliDateConverter;
 
 namespace App.Web;
 
@@ -31,7 +32,7 @@ public static class ApplicationDiConfig
         var jwtSettings = builder.Configuration.GetSection("JwtSettings");
         var secret = jwtSettings.GetSection("Secret").Value;
 
-        
+
         builder.Services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = "smart";
@@ -116,6 +117,7 @@ public static class ApplicationDiConfig
             .AddScoped<DbContext, ApplicationDbContext>()
             .AddScoped<IAuthenticator, Authenticator>().AddHttpContextAccessor();
 
+        builder.Services.UseNepaliDate();
         builder.Services.ConfigureServices();
         builder.Services.AddCors(options =>
         {
