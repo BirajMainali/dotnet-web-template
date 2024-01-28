@@ -22,7 +22,7 @@
    ```
 * Unit Of work
    ```csharp
-  public class UserService(IUserValidator userValidator, IUow uo) : IUserService
+  public class UserService(IUserValidator userValidator, IUow uow) : IUserService
   { 
    public async Task<AppUser> CreateUser(UserDto dto)
    {
@@ -51,7 +51,7 @@
     ```
  * Multi-tenant Configuration `appsetting.json`. Physical separation is been used. 
      ```json
-      "UseMultiTenancy": true,  // you can control tenant from here.
+      "UseMultiTenancy": true,  you can control tenant from here.
     ```
  * App-setting configurations
    ```csharp
