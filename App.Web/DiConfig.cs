@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using App.Base.Constants;
 using App.Base.Repository;
 using App.Base.Settings;
 using App.Web.Data;
@@ -10,7 +9,6 @@ using App.Web.Providers.Interfaces;
 using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
