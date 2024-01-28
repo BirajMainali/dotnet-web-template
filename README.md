@@ -87,3 +87,4 @@
 * Physical content can saved outside application scope.
 * Explore `FileHelper` to work with physical file.
 * Check `IDatabaseConnectionProvider` to create new dapper connection.
+* Used `tabler` theme
