@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using App.Base.Entities;
 
 namespace App.Base.Repository;
 
-public interface IRepository<T, in TKey> where T : class
+public interface IRepository<T, in TKey> where T : FullAuditedEntity<TKey>
 {
     Task<T?> FindByAsync(TKey id);
 

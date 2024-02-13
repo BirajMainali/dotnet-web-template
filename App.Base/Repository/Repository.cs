@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using App.Base.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Base.Repository;
 
-public class Repository<T, TKey> : IRepository<T, TKey> where T : class
+public class Repository<T, TKey> : IRepository<T, TKey> where T : FullAuditedEntity<TKey>
 {
     private readonly DbSet<T> _dbSet;
 
@@ -54,6 +55,7 @@ public class Repository<T, TKey> : IRepository<T, TKey> where T : class
         {
             throw new KeyNotFoundException($"Entity with key {id} was not found.");
         }
+
         return entity;
     }
 }
